@@ -1,8 +1,9 @@
 #[starknet::contract]
 mod Vault {
     use openzeppelin::token::erc20::ERC20Component;
-    use openzeppelin::token::erc20::interface::{IERC20Dispatcher, IERC20DispatcherTrait};
+    use openzeppelin::interfaces::erc20::interface::{IERC20Dispatcher, IERC20DispatcherTrait};
     use starknet::{ContractAddress, get_caller_address, get_contract_address};
+    use starknet::storage::{StoragePointerReadAccess, StoragePointerWriteAccess};
 
     use crate::math::{
         convert_to_assets_down,
@@ -54,17 +55,20 @@ mod Vault {
         self.erc20.initializer('Vault share', 'VSHARE');
     }
 
-    fn asset_dispature(self: @ContractState) -> IERC20Dispatcher {
-        IERC20Dispatcher { contract_address: self.asset.read() }
+    #[generate_trait]
+    impl InternalImpl of InternalTrait {
+        fn asset_dispature(self: @ContractState) -> IERC20Dispatcher {
+            IERC20Dispatcher { contract_address: self.asset.read() }
+        }
+
+        fn total_assets(self: @ContractState) -> u256 {
+            let token = self.asset_dispature();
+            token.balance_of(get_contract_address())
+        }
     }
 
-    fn total_assets(self: @ContractState) -> u256 {
-        let token = self.asset_dispature();
-        token.balance_of(get_contract_address())
-    }
 
-
-    #[view]
+    #[external(v0)]
     fn asset(self: @ContractState) -> ContractAddress {
         self.asset.read()
     }
@@ -173,50 +177,50 @@ mod Vault {
         assets
     }
 
-    #[view]
+    #[external(v0)]
     fn preview_deposit(self: @ContractState, assets: u256) -> u256 {
         let total_assets = self.total_assets();
         let supply = self.erc20.total_supply();
         convert_to_shares_down(assets, total_assets, supply)
     }
 
-    #[view]
+    #[external(v0)]
     fn preview_mint(self: @ContractState, shares: u256) -> u256 {
         let total_assets = self.total_assets();
         let supply = self.erc20.total_supply();
         convert_to_assets_up(shares, total_assets, supply)
     }
 
-    #[view]
+    #[external(v0)]
     fn preview_withdraw(self: @ContractState, assets: u256) -> u256 {
         let total_assets = self.total_assets();
         let supply = self.erc20.total_supply();
         convert_to_shares_up(assets, total_assets, supply)
     }
 
-    #[view]
+    #[external(v0)]
     fn preview_redeem(self: @ContractState, shares: u256) -> u256 {
         let total_assets = self.total_assets();
         let supply = self.erc20.total_supply();
         convert_to_assets_down(shares, total_assets, supply)
     }
 
-    #[view]
+    #[external(v0)]
     fn max_deposit(self: @ContractState) -> u256 {
-        u256::MAX
+        Bounded::max_value()
     }
 
-    #[view]
+    #[external(v0)]
     fn max_mint(self: @ContractState) -> u256 {
-        u256::MAX
+        Bounded::max_value()
     }
 
-    #[view]
+    #[external(v0)]
     fn max_redeem(self: @ContractState, owner: ContractAddress) -> u256 {
         self.erc20.balance_of(owner)
     }
 
-    #[view]
+    #[external(v0)]
     fn max_withdraw(self: @ContractState, owner: ContractAddress) -> u256 {
         let shares = self.erc20.balance_of(owner);
 
