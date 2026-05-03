@@ -1,5 +1,6 @@
 pub mod interface;
 pub mod math;
+pub mod mocks;
 pub use interface::IVault;
 
 #[starknet::contract]
