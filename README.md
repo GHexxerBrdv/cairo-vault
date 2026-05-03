@@ -49,6 +49,10 @@ Run the integration tests using Starknet Foundry:
 scarb test
 ```
 
+# Deploy address
+
+Vault :- 0x7caa5c1c5556279ddf8a95a678b683b57df5a766ce120128b44c107c47effae (Starkent sepolia)
+
 ## Usage
 
 ### Deployment
