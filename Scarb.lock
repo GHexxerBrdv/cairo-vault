@@ -2,15 +2,6 @@
 version = 1
 
 [[package]]
-name = "erc4626"
-version = "0.1.0"
-dependencies = [
- "openzeppelin",
- "sncast_std",
- "snforge_std",
-]
-
-[[package]]
 name = "openzeppelin"
 version = "3.0.0"
 source = "registry+https://scarbs.xyz/"
@@ -167,4 +158,13 @@ source = "registry+https://scarbs.xyz/"
 checksum = "sha256:ad59592257cbb26771c2a17fc487661e77714cc6677a044a79388cfa08e92da8"
 dependencies = [
  "snforge_scarb_plugin",
+]
+
+[[package]]
+name = "vault_4626"
+version = "0.1.0"
+dependencies = [
+ "openzeppelin",
+ "sncast_std",
+ "snforge_std",
 ]

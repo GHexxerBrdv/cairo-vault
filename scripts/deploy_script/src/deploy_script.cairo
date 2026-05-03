@@ -1,5 +1,6 @@
 use sncast_std::{
-    declare, deploy, get_nonce, DeclareResultTrait, FeeSettingsTrait, DeployResultTrait, DisplayDefault
+    DeclareResultTrait, DeployResultTrait, DisplayDefault, FeeSettingsTrait, declare, deploy,
+    get_nonce,
 };
 use starknet::{ContractAddress, contract_address_const};
 
@@ -19,7 +20,9 @@ fn main() {
     let name: ByteArray = "Mock Token";
     let symbol: ByteArray = "MTK";
     let initial_supply: u256 = 1000000000000000000000000; // 1M tokens
-    let recipient = contract_address_const::<0x5f77805612e4b5c8cec7c17cfeb44d3667865b5647a768943d3c607d444bb05>();
+    let recipient = contract_address_const::<
+        0x5f77805612e4b5c8cec7c17cfeb44d3667865b5647a768943d3c607d444bb05,
+    >();
 
     name.serialize(ref mock_constructor_args);
     symbol.serialize(ref mock_constructor_args);
@@ -33,8 +36,9 @@ fn main() {
         Option::Some(salt),
         true,
         fee_settings,
-        Option::Some(mock_deploy_nonce)
-    ).expect('MockERC20 deploy failed');
+        Option::Some(mock_deploy_nonce),
+    )
+        .expect('MockERC20 deploy failed');
 
     let asset_address = mock_deploy_result.contract_address;
     println!("MockERC20 deployed at: {:?}", asset_address);
@@ -54,8 +58,9 @@ fn main() {
         Option::Some(salt),
         true,
         fee_settings,
-        Option::Some(vault_deploy_nonce)
-    ).expect('Vault deploy failed');
+        Option::Some(vault_deploy_nonce),
+    )
+        .expect('Vault deploy failed');
 
     println!("Vault deployed at: {:?}", vault_deploy_result.contract_address);
 }
