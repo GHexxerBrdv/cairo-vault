@@ -1,6 +1,6 @@
-mod math;
-mod interface;
-use interface::IVault;
+pub mod interface;
+pub mod math;
+pub use interface::IVault;
 
 #[starknet::contract]
 pub mod Vault {
