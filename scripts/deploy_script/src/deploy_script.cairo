@@ -1,9 +1,7 @@
-use sncast_std::{
-    DeclareResultTrait, DeployResultTrait, DisplayDefault, FeeSettingsTrait, declare, deploy,
-    get_nonce,
-};
-use starknet::{ContractAddress, contract_address_const};
+use sncast_std::{DeclareResultTrait, FeeSettingsTrait, declare, deploy, get_nonce};
+use starknet::contract_address_const;
 
+#[executable]
 fn main() {
     let max_fee = 999999999999999;
     let fee_settings = FeeSettingsTrait::max_fee(max_fee);
@@ -31,7 +29,7 @@ fn main() {
 
     let mock_deploy_nonce = get_nonce('latest');
     let mock_deploy_result = deploy(
-        mock_declare_result.class_hash,
+        *mock_declare_result.class_hash(),
         mock_constructor_args,
         Option::Some(salt),
         true,
@@ -53,7 +51,7 @@ fn main() {
     let vault_constructor_args = array![asset_address.into()];
     let vault_deploy_nonce = get_nonce('latest');
     let vault_deploy_result = deploy(
-        vault_declare_result.class_hash,
+        *vault_declare_result.class_hash(),
         vault_constructor_args,
         Option::Some(salt),
         true,

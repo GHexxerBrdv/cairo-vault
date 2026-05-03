@@ -4,10 +4,14 @@ version = "0.1.0"
 edition = "2025_12"
 
 # See more keys and their definitions at https://docs.swmansion.com/scarb/docs/reference/manifest.html
-[[target.starknet-contract]]
-name = "deploy_script_target"
+
+
+[cairo]
+enable-gas = false
 
 [executable]
+path = "src/deploy_script.cairo"
+
 
 [dependencies]
 cairo_execute = "2.16.0"
